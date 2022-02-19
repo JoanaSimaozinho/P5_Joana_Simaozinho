@@ -52,6 +52,27 @@ async function displayProducts() {
     colorsElt.innerHTML += option;
   }
 
+  var title = document.getElementById("title");
+  console.log(title);
+  if (title) {
+    title.innerHTML += product.name;
+  }
+
+  var description = document.getElementById("description");
+  console.log(description);
+  if (description) {
+    description.innerHTML += product.description;
+  }
+
+  var price = document.getElementById("price");
+  console.log(price);
+  if (price) {
+    price.innerHTML += product.price;
+  }
+
+  var quantity = document.getElementById("quantity");
+  console.log(quantity);
+
   // const list = ` <article>
   //   <div class="item__img">
   //     <img src="${product.imageUrl}" alt="${product.altTxt}" />
@@ -114,10 +135,27 @@ if (btnElt !== null) {
       alert("Choisissez au moins une couleur");
       return false;
     }
+
     // Vérifier qtité
+    var minValue = 1;
+    quantity.setAttribute("min", minValue);
+    console.log(minValue);
+    var maxValue = 100;
+    quantity.setAttribute("max", maxValue);
+    console.log(maxValue);
+
+    if (quantity.value > maxValue) {
+      alert("Vous ne pouvez pas dépasser les 100 articles");
+      return false;
+    }
+
+    if (quantity.value < minValue) {
+      alert("sélectionnez la quantité");
+      return false;
+    }
     // Ajouter au panier :
     // Tester si canap avec cet id est deja au panier (en dernier)
-    // Si oui > metrre à jour la quantité
+    // Si oui > mettre à jour la quantité
     // Si non > ajouter au localStorage
     // Popup "continuer mes achats" ou "Aller au panier" > à vérifier dans les consignes
   });
