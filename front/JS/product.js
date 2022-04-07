@@ -187,7 +187,11 @@ if (btnElt !== null) {
     }
     //J'ajoute le produit au panier clé : cart valeur: panier chaque objet sera un canapé
     localStorage.setItem("cart", JSON.stringify(cartArray));
-
+    alert(
+      `Vous avez ajouté ${quantityValue} canapé${
+        quantityValue > 1 ? "s" : ""
+      } dans votre panier`
+    );
     // Tester si canap avec cet id est deja au panier (en dernier)
     // Si oui > mettre à jour la quantité
     // Si non > ajouter au localStorage
