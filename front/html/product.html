@@ -89,7 +89,9 @@
                 <div class="item__content__settings__color">
                   <label for="color-select">Choisir une couleur :</label>
                   <select name="color-select" id="colors">
-                    <option value="">--SVP, choisissez une couleur --</option>
+                    <option value="Red">Red</option>
+                    <option value="Black">Black</option>
+                    <!-- <option value="">--SVP, choisissez une couleur --</option> -->
                   </select>
                 </div>
 
@@ -102,7 +104,7 @@
                     name="itemQuantity"
                     min="1"
                     max="100"
-                    value="0"
+                    value="3"
                     id="quantity"
                   />
                 </div>
@@ -110,6 +112,11 @@
 
               <div class="item__content__addButton">
                 <button id="addToCart">Ajouter au panier</button>
+                <div class="container-notifications">
+                  <!-- Dans cette DIV, viendront se placer 
+                  les notifications
+                  -->
+                </div>
               </div>
             </div>
           </article>
