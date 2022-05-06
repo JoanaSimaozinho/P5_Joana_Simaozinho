@@ -1,6 +1,3 @@
-let totalPrice = 0;
-let totalQuantity = 0;
-
 async function getProduct(id) {
   return new Promise((resolve, reject) => {
     const url = `http://localhost:3000/api/products/${id}`;
@@ -18,26 +15,40 @@ async function getProduct(id) {
 
 function getCartArray() {
   const cart = localStorage.getItem("cart");
-  return JSON.parse(cart);
+  return JSON.parse(cart) || [];
 }
 
-async function setProductsAndTotalsDisplay() {
-  totalPrice = 0;
-  totalQuantity = 0;
-  let productsHTML = "";
+function deleteProduct(params) {
+  const splitParams = params.split(",");
+  const id = splitParams[0];
+  const color = splitParams[1];
   const cartArray = getCartArray();
+  for (let index = 0; index < cartArray.length; index++) {
+    const product = cartArray[index];
+    if (product.id === id && product.color === color) {
+      cartArray.splice(index, 1);
+      localStorage.setItem("cart", JSON.stringify(cartArray));
+      break;
+    }
+  }
+  getProductsDisplay();
+}
+
+async function getProductsDisplay() {
+  const cartArray = getCartArray();
+  let productsHTML = "";
+  let totalPrice = 0;
+  let totalQuantity = 0;
   for (const line of cartArray) {
     const prod = await getProduct(line.id);
     console.log(prod);
-    totalPrice += line.quantity * prod.price;
-    totalQuantity++;
     productsHTML += `<article class="cart__item" data-id="${line.id}" data-color="${line.color}">
             <div class="cart__item__img">
               <img src="${prod.imageUrl}" alt="Photographie d'un canapé" />
             </div>
             <div class="cart__item__content">
               <div class="cart__item__content__description">
-                <h2>Nom du produit</h2>
+                <h2>${prod.name}</h2>
                 <p>${line.color}</p>
                 <p>${prod.price} €</p>
               </div>
@@ -59,57 +70,35 @@ async function setProductsAndTotalsDisplay() {
               </div>
             </div>
           </article>`;
+    totalPrice += prod.price * line.quantity;
+    totalQuantity += parseInt(line.quantity);
   }
-
+  if (cartArray.length === 0) {
+    document.querySelector(".cart__price").style.visibility = "hidden";
+    return;
+  }
+  console.log("totalPrice");
+  console.log(totalPrice);
   const cartItemsElt = document.getElementById("cart__items");
   if (cartItemsElt) {
     cartItemsElt.innerHTML = productsHTML;
   }
-
-  const totalPriceElement = document.getElementById("totalPrice");
-  if (totalPriceElement) {
-    totalPriceElement.textContent = totalPrice;
+  const totalPriceElt = document.getElementById("totalPrice");
+  if (totalPriceElt) {
+    totalPriceElt.textContent = totalPrice;
   }
-  const totalQuantityElement = document.getElementById("totalQuantity");
-  const qtityItems = document.querySelectorAll("input[name='itemQuantity']");
-  // debugger;
-  if (cartArray.length > 0 && qtityItems.length > 0) {
-    qtityItems.addEventListener("input", function (evt) {
-      console.log("ok");
-    });
+  const totalQuantityElt = document.getElementById("totalQuantity");
+  if (totalQuantityElt) {
+    totalQuantityElt.textContent = totalQuantity;
   }
-}
-getDisplay();
-
-function deleteProduct(params) {
-  const splitParams = params.split(",");
-  const id = splitParams[0];
-  const color = splitParams[1];
-  const cartArray = getCartArray();
-  for (let index = 0; index < cartArray.length; index++) {
-    const product = cartArray[index];
-    if (product.id === id && product.color === color) {
-      cartArray.splice(index, 1);
+  const itemQuantity = document.querySelectorAll(".itemQuantity");
+  itemQuantity.forEach((item, index) => {
+    item.addEventListener("input", function (evt) {
+      cartArray[index].quantity = parseInt(this.value);
       localStorage.setItem("cart", JSON.stringify(cartArray));
-      getDisplay();
-      break;
-    }
-  }
+      getProductsDisplay();
+    });
+  });
 }
 
-function getTotalPriceDisplay() {
-  // Faire le total
-  // Remplacer l'element prix
-  // Remplacer le nb d'articles
-}
-
-function getDisplay() {
-  setProductsAndTotalsDisplay();
-  getTotalPriceDisplay();
-}
-
-// Récupere mon panier (localstorage)
-// Récupere depuis le serveur les infos manquantes des canaps (img, desc, alt, prix)
-// Si le serveur ne trouve pas mon canap, indiquer "produit manquant" === checker status 200 dans la réponse
-// Pendant je récupere les infos, Je fais la somme des prix avec les produits status 200
-// Je mets à jour le html
+getProductsDisplay();
