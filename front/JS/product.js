@@ -136,6 +136,7 @@ if (btnElt !== null) {
     }
     const colorValue = colorsElt.value;
     console.log(colorValue);
+
     // Vérifier qtité
     const quantityValue = quantity.value;
     const minValue = 1;
