@@ -73,16 +73,15 @@ async function getProductsDisplay() {
     totalPrice += prod.price * line.quantity;
     totalQuantity += parseInt(line.quantity);
   }
-  if (cartArray.length === 0) {
-    document.querySelector(".cart__price").style.visibility = "hidden";
-    return;
-  }
-  console.log("totalPrice");
-  console.log(totalPrice);
   const cartItemsElt = document.getElementById("cart__items");
   if (cartItemsElt) {
     cartItemsElt.innerHTML = productsHTML;
   }
+  if (cartArray.length === 0) {
+    document.querySelector(".cart__price").style.visibility = "hidden";
+    return;
+  }
+
   const totalPriceElt = document.getElementById("totalPrice");
   if (totalPriceElt) {
     totalPriceElt.textContent = totalPrice;
@@ -100,5 +99,28 @@ async function getProductsDisplay() {
     });
   });
 }
+function handleFormSubmit() {
+  var form = document.querySelector("form");
+  console.log(form);
+  form.addEventListener("submit", function (event) {
+    event.preventDefault();
+    const formData = new FormData(form);
+    for (var pair of formData.entries()) {
+      console.log(pair[0] + ": " + pair[1]);
+      const key = pair[0];
+      const result = pair[1];
+      // If key === firstName
+      // Alors value ne doit pas contenir de chiffre
+      // Si chiffre alors return error
+    }
+    // var username = document.getElementById("username").value
+    // console.log(username)
+
+    // var email = document.getElementById("email").value
+    // console.log(email)
+  });
+}
+
+handleFormSubmit();
 
 getProductsDisplay();
