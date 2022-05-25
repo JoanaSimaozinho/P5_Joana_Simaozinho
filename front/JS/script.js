@@ -2,16 +2,21 @@ console.log("start");
 
 async function getProducts() {
   return new Promise((resolve, reject) => {
-    const url = "http://localhost:3000/api/products/";
-    fetch(url)
-      .then((response) => response.json())
-      .then((data) => {
-        resolve(data);
-      })
-      .catch((e) => {
-        console.log(e);
-        reject(e);
-      });
+    try {
+      const url = "http://localhost:3000/api/products/";
+      fetch(url)
+        .then((response) => response.json())
+        .then((data) => {
+          resolve(data);
+        })
+        .catch((e) => {
+          console.log(e);
+          reject(e);
+        });
+    } catch (error) {
+      console.log(error);
+      reject(error);
+    }
   });
 }
 

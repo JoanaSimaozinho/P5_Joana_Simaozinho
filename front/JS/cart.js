@@ -19,9 +19,7 @@ function getCartArray() {
 }
 
 function deleteProduct(params) {
-  const splitParams = params.split(",");
-  const id = splitParams[0];
-  const color = splitParams[1];
+  const { id, color } = params;
   const cartArray = getCartArray();
   for (let index = 0; index < cartArray.length; index++) {
     const product = cartArray[index];
@@ -65,7 +63,7 @@ async function getProductsDisplay() {
                   />
                 </div>
                 <div class="cart__item__content__settings__delete">
-                  <p class="deleteItem"  onclick="deleteProduct('${line.id},${line.color}')">Supprimer</p>
+                  <p class="deleteItem"  data-id="${line.id}" data-color="${line.color}">Supprimer</p>
                 </div>
               </div>
             </div>
@@ -73,6 +71,7 @@ async function getProductsDisplay() {
     totalPrice += prod.price * line.quantity;
     totalQuantity += parseInt(line.quantity);
   }
+
   const cartItemsElt = document.getElementById("cart__items");
   if (cartItemsElt) {
     cartItemsElt.innerHTML = productsHTML;
@@ -80,6 +79,16 @@ async function getProductsDisplay() {
   if (cartArray.length === 0) {
     document.querySelector(".cart__price").style.visibility = "hidden";
     return;
+  }
+
+  const deleteItems = document.querySelectorAll(".deleteItem");
+  for (const deleteItem of deleteItems) {
+    deleteItem.addEventListener("click", (event) => {
+      deleteProduct({
+        id: targetElement.dataset.id,
+        color: targetElement.dataset.color,
+      });
+    });
   }
 
   const totalPriceElt = document.getElementById("totalPrice");
