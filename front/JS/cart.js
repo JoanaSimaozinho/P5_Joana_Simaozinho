@@ -39,35 +39,34 @@ async function getProductsDisplay() {
   let totalQuantity = 0;
   for (const line of cartArray) {
     const prod = await getProduct(line.id);
-    console.log(prod);
     productsHTML += `<article class="cart__item" data-id="${line.id}" data-color="${line.color}">
-            <div class="cart__item__img">
-              <img src="${prod.imageUrl}" alt="Photographie d'un canapé" />
+          <div class="cart__item__img">
+            <img src="${prod.imageUrl}" alt="Photographie d'un canapé" />
+          </div>
+          <div class="cart__item__content">
+            <div class="cart__item__content__description">
+              <h2>${prod.name}</h2>
+              <p>${line.color}</p>
+              <p>${prod.price} €</p>
             </div>
-            <div class="cart__item__content">
-              <div class="cart__item__content__description">
-                <h2>${prod.name}</h2>
-                <p>${line.color}</p>
-                <p>${prod.price} €</p>
+            <div class="cart__item__content__settings">
+              <div class="cart__item__content__settings__quantity">
+                <p>Qté :</p>
+                <input
+                  type="number"
+                  class="itemQuantity"
+                  name="itemQuantity"
+                  min="1"
+                  max="100"
+                  value="${line.quantity}"
+                />
               </div>
-              <div class="cart__item__content__settings">
-                <div class="cart__item__content__settings__quantity">
-                  <p>Qté :</p>
-                  <input
-                    type="number"
-                    class="itemQuantity"
-                    name="itemQuantity"
-                    min="1"
-                    max="100"
-                    value="${line.quantity}"
-                  />
-                </div>
-                <div class="cart__item__content__settings__delete">
-                  <p class="deleteItem"  data-id="${line.id}" data-color="${line.color}">Supprimer</p>
-                </div>
+              <div class="cart__item__content__settings__delete">
+                <p class="deleteItem" data-id="${line.id}" data-color="${line.color}">Supprimer</p>
               </div>
             </div>
-          </article>`;
+          </div>
+        </article>`;
     totalPrice += prod.price * line.quantity;
     totalQuantity += parseInt(line.quantity);
   }
@@ -84,13 +83,13 @@ async function getProductsDisplay() {
   const deleteItems = document.querySelectorAll(".deleteItem");
   for (const deleteItem of deleteItems) {
     deleteItem.addEventListener("click", (event) => {
+      const targetElement = event.target;
       deleteProduct({
         id: targetElement.dataset.id,
         color: targetElement.dataset.color,
       });
     });
   }
-
   const totalPriceElt = document.getElementById("totalPrice");
   if (totalPriceElt) {
     totalPriceElt.textContent = totalPrice;
@@ -108,25 +107,82 @@ async function getProductsDisplay() {
     });
   });
 }
+
+function hasNumber(string) {
+  return /\d/.test(string);
+}
+
+function isEmail(email) {
+  return email
+    .toLowerCase()
+    .match(
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    );
+}
+
+async function sendCommand(payload) {
+  return new Promise((resolve, reject) => {
+    fetch("http://localhost:3000/api/products/order", {
+      method: "POST",
+      headers: {
+        // 'Accept': 'application/json',
+        "Content-Type": "application/json",
+      },
+      // mode: "cors",
+      body: JSON.stringify(payload),
+    })
+      .then((response) => resolve(response.json()))
+      .catch((e) => {
+        console.log(e);
+        reject(e);
+      });
+  });
+}
+
 function handleFormSubmit() {
   var form = document.querySelector("form");
-  console.log(form);
-  form.addEventListener("submit", function (event) {
+  form.addEventListener("submit", async function (event) {
     event.preventDefault();
     const formData = new FormData(form);
+    let contact = {};
     for (var pair of formData.entries()) {
-      console.log(pair[0] + ": " + pair[1]);
+      // console.log(pair[0] + ": " + pair[1]);
       const key = pair[0];
       const result = pair[1];
-      // If key === firstName
-      // Alors value ne doit pas contenir de chiffre
-      // Si chiffre alors return error
+      // TO DO : finir les test
+      if (key === "firstName") {
+        const firstNameError = document.querySelector("#firstNameErrorMsg");
+        if (firstNameError) {
+          if (!result) {
+            return (firstNameError.textContent = " Pas vide non");
+          }
+          if (hasNumber(result)) {
+            return (firstNameError.textContent = "Pas de chiffre, non. ");
+          }
+          firstNameError.textContent = "";
+        }
+      }
+      if (key === "email") {
+        const emailError = document.querySelector("#emailErrorMsg");
+        if (emailError) {
+          if (!result) {
+            return (emailError.textContent = " Pas vide non");
+          }
+          if (!isEmail(result)) {
+            return (emailError.textContent =
+              "Ca n est pas un email. Attention attention, non.");
+          }
+          emailError.textContent = "";
+        }
+      }
+      contact[key] = result;
     }
-    // var username = document.getElementById("username").value
-    // console.log(username)
-
-    // var email = document.getElementById("email").value
-    // console.log(email)
+    // sendCommand({ contact: contact, products: ["107fb5b75607497b96722bda5b504926"] });
+    const commandResult = await sendCommand({
+      contact,
+      products: ["107fb5b75607497b96722bda5b504926"],
+    });
+    console.log(commandResult);
   });
 }
 
