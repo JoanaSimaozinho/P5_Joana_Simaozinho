@@ -141,49 +141,66 @@ async function sendCommand(payload) {
 
 function handleFormSubmit() {
   var form = document.querySelector("form");
-  form.addEventListener("submit", async function (event) {
-    event.preventDefault();
-    const formData = new FormData(form);
-    let contact = {};
-    for (var pair of formData.entries()) {
-      // console.log(pair[0] + ": " + pair[1]);
-      const key = pair[0];
-      const result = pair[1];
-      // TO DO : finir les test
-      if (key === "firstName") {
-        const firstNameError = document.querySelector("#firstNameErrorMsg");
-        if (firstNameError) {
-          if (!result) {
-            return (firstNameError.textContent = " Pas vide non");
+  if (form) {
+    form.addEventListener("submit", async function (event) {
+      event.preventDefault();
+      const formData = new FormData(form);
+      let contact = {};
+      for (var pair of formData.entries()) {
+        // console.log(pair[0] + ": " + pair[1]);
+        const key = pair[0];
+        const result = pair[1];
+        // TO DO : finir les test
+        if (key === "firstName") {
+          const firstNameError = document.querySelector("#firstNameErrorMsg");
+          if (firstNameError) {
+            if (!result) {
+              return (firstNameError.textContent = " Pas vide non");
+            }
+            if (hasNumber(result)) {
+              return (firstNameError.textContent = "Pas de chiffre, non. ");
+            }
+            firstNameError.textContent = "";
           }
-          if (hasNumber(result)) {
-            return (firstNameError.textContent = "Pas de chiffre, non. ");
-          }
-          firstNameError.textContent = "";
         }
-      }
-      if (key === "email") {
-        const emailError = document.querySelector("#emailErrorMsg");
-        if (emailError) {
-          if (!result) {
-            return (emailError.textContent = " Pas vide non");
+        if (key === "email") {
+          const emailError = document.querySelector("#emailErrorMsg");
+          if (emailError) {
+            if (!result) {
+              return (emailError.textContent = " Pas vide non");
+            }
+            if (!isEmail(result)) {
+              return (emailError.textContent =
+                "Ca n est pas un email. Attention attention, non.");
+            }
+            emailError.textContent = "";
           }
-          if (!isEmail(result)) {
-            return (emailError.textContent =
-              "Ca n est pas un email. Attention attention, non.");
-          }
-          emailError.textContent = "";
         }
+        contact[key] = result;
       }
-      contact[key] = result;
-    }
-    // sendCommand({ contact: contact, products: ["107fb5b75607497b96722bda5b504926"] });
-    const commandResult = await sendCommand({
-      contact,
-      products: ["107fb5b75607497b96722bda5b504926"],
+      // sendCommand({ contact: contact, products: ["107fb5b75607497b96722bda5b504926"] });
+      // TODO POUR LE 16:
+      // Récupérer le vrai formulaire
+      // Récupérer le arrayCart
+      const products = getCartArray();
+      let productIds = [];
+      for (const product of products) {
+        productIds.push(product.id);
+      }
+      console.log(productIds);
+      // Boucler sur les elements
+      // Faire un tableau avec les id des produits
+      // Remplacer le faux tableau ["107fb5b75607497b96722bda5b504926"] par le résultat du dessus
+
+      const commandResult = await sendCommand({
+        contact,
+        products: ["107fb5b75607497b96722bda5b50492"],
+      });
+      // TODO POUR LE 16:
+      // TESTER LE STATUS DE LA REPONSE AVANT LA REDIRECTION
+      // window.location.href = `confirmation.html?id=${commandResult.orderId}`;
     });
-    console.log(commandResult);
-  });
+  }
 }
 
 handleFormSubmit();
