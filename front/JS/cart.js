@@ -183,24 +183,20 @@ function handleFormSubmit() {
       // Récupérer le vrai formulaire
       // Récupérer le arrayCart
       const products = getCartArray();
-      let productIds = [];
-      for (const product of products) {
-        productIds.push(product.id);
-      }
-      console.log(productIds);
+  
       // Boucler sur les elements
       // Faire un tableau avec les id des produits
-      let newArray = [];
+      let productsIds = [];
 
       for (let index = 0; index < products.length; index++) {
-        newArray.push(products[index].id);
+        productsIds.push(products[index].id);
       }
 
       // Remplacer le faux tableau ["107fb5b75607497b96722bda5b504926"] par le résultat du dessus
 
       const commandResult = await sendCommand({
         contact,
-        products: ["107fb5b75607497b96722bda5b50492"],
+        products: productsIds,
       });
       // TODO POUR LE 16:
       // TESTER LE STATUS DE LA REPONSE AVANT LA REDIRECTION

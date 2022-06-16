@@ -72,55 +72,6 @@ async function displayProducts() {
 
   var quantity = document.getElementById("quantity");
   console.log(quantity);
-
-  // const list = ` <article>
-  //   <div class="item__img">
-  //     <img src="${product.imageUrl}" alt="${product.altTxt}" />
-  //   </div>
-  //   <div class="item__content">
-  //     <div class="item__content__titlePrice">
-  //       <h1 id="title">${product.name}</h1>
-  //       <p>Prix : <span id="price">${product.price}</span>€</p>
-  //     </div>
-
-  //     <div class="item__content__description">
-  //       <p class="item__content__description__title">Description :</p>
-  //       <p id="description">
-  //         ${product.description}
-  //       </p>
-  //     </div>
-
-  //     <div class="item__content__settings">
-  //       <div class="item__content__settings__color">
-  //         <label for="color-select">${product.colors}</label>
-  //         <select name="color-select" id="colors">
-  //           <option value="">--SVP, choisissez une couleur --</option>
-  //           ${option}
-  //         </select>
-  //       </div>
-
-  //       <div class="item__content__settings__quantity">
-  //         <label for="itemQuantity"
-  //           >Nombre d'article(s) (1-100) :</label
-  //         >
-  //         <input
-  //           type="number"
-  //           name="itemQuantity"
-  //           min="1"
-  //           max="100"
-  //           value="0"
-  //           id="quantity"
-  //         />
-  //       </div>
-  //     </div>
-
-  //     <div class="item__content__addButton">
-  //       <button id="addToCart">Ajouter au panier</button>
-  //     </div>
-  //   </div>
-  // </article>`;
-  // document.getElementById("item").innerHTML = list;
-  //console.log(list);
 }
 
 displayProducts();
@@ -164,7 +115,7 @@ if (btnElt !== null) {
     if (cart !== null) {
       cartArray = JSON.parse(cart);
       console.log(cartArray);
-
+//on boucle sur les produits du panier pour savoir si un canapt qui a la meme id et meme couleur existe
       for (const item of cartArray) {
         console.log(item);
         if (item.id === idProduct && item.color === colorValue) {
