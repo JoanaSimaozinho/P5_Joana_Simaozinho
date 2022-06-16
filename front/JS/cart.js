@@ -14,10 +14,12 @@ async function getProduct(id) {
 }
 
 function getCartArray() {
+  //On renvoie la valeur associée à la clé passée en paramètre avec getItem()
   const cart = localStorage.getItem("cart");
   return JSON.parse(cart) || [];
 }
 
+//Fonction pour supprimer le ou les produits du panier
 function deleteProduct(params) {
   const { id, color } = params;
   const cartArray = getCartArray();
@@ -179,7 +181,6 @@ function handleFormSubmit() {
         contact[key] = result;
       }
       // sendCommand({ contact: contact, products: ["107fb5b75607497b96722bda5b504926"] });
-      // TODO POUR LE 16:
       // Récupérer le vrai formulaire
       // Récupérer le arrayCart
       const products = getCartArray();
@@ -198,9 +199,8 @@ function handleFormSubmit() {
         contact,
         products: productsIds,
       });
-      // TODO POUR LE 16:
       // TESTER LE STATUS DE LA REPONSE AVANT LA REDIRECTION
-      // window.location.href = `confirmation.html?id=${commandResult.orderId}`;
+      window.location.href = `confirmation.html?id=${commandResult.orderId}`;
     });
   }
 }

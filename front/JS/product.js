@@ -1,19 +1,7 @@
-console.log("product");
-
-// TODO :
 // Récupérer l'id qui est dans l'url
-// id est un parametre, derriere ?
-// si plusieurs parametres ... .html?param1=blabla&param2=bloblo
-
-// Appel au serveur : donne moi le produit qui a l'id récupéré /api/products/idrécupéré
-
-// Construire le html
-
-// Injecter dans la page
-
-console.log("start");
 const idProduct = new URL(window.location.href).searchParams.get("id");
 
+// ON appel le serveur : donne moi le produit qui a l'id récupéré /api/products/idrécupéré
 async function getProduct() {
   return new Promise((resolve, reject) => {
     const url = `http://localhost:3000/api/products/${idProduct}`;
@@ -33,21 +21,19 @@ async function getProduct() {
 async function displayProducts() {
   const product = await getProduct();
   console.log(product);
-
+// Construire le html
+// Injecter dans la page
   let option = "";
   product.colors.forEach(
     (color) => (option += `<option value="${color}">${color}</option>`)
   );
-
   const img = document.querySelector("#item .item__img img");
   if (img) {
     img.src = product.imageUrl;
     img.alt = product.altTxt;
     //img.setAttribute("alt", product.altTxt);
   }
-
   const colorsElt = document.querySelector("#colors");
-  console.log(colorsElt.value);
   if (colorsElt !== null) {
     colorsElt.innerHTML += option;
   }
@@ -73,11 +59,13 @@ async function displayProducts() {
   var quantity = document.getElementById("quantity");
   console.log(quantity);
 }
-
 displayProducts();
 
+
+//Je selectionne et stocke le bouton
 const btnElt = document.getElementById("addToCart");
 if (btnElt !== null) {
+  //Ajoutez un écouteur d'événement qui se déclenche lorsqu'on clique sur le bouton 
   btnElt.addEventListener("click", () => {
     // Verifier couleur selectionnée
     const colorsElt = document.querySelector("#colors");
@@ -106,6 +94,7 @@ if (btnElt !== null) {
       alert("Sélectionnez la quantité");
       return false;
     }
+
     // Ajouter au panier :
 
     const cart = localStorage.getItem("cart");
@@ -115,7 +104,7 @@ if (btnElt !== null) {
     if (cart !== null) {
       cartArray = JSON.parse(cart);
       console.log(cartArray);
-//on boucle sur les produits du panier pour savoir si un canapt qui a la meme id et meme couleur existe
+//on boucle sur les produits du panier pour savoir si un canap qui a la meme id et meme couleur existe
       for (const item of cartArray) {
         console.log(item);
         if (item.id === idProduct && item.color === colorValue) {
@@ -128,8 +117,8 @@ if (btnElt !== null) {
       }
     }
 
-    //Todo verifier que cart n'est pas null
-    //Si cart est nul alors cartArray est egal a tableau vide
+    //verifier que cart n'est pas null
+    //Si cart est nul alors cartArray est egal a un tableau vide
     if (found === false) {
       cartArray.push({
         id: idProduct,
@@ -149,37 +138,3 @@ if (btnElt !== null) {
     // Si non > ajouter au localStorage
   });
 }
-
-// Popup "continuer mes achats" ou "Aller au panier" > à vérifier dans les consignes
-
-//Je selectionne et stocke le bouton
-// const addToCart = document.getElementById("addToCart");
-// console.log(addToCart);
-
-//Je selectionne et stocke la DIV container-notifications
-// const ctn = document.querySelector(".container-notifications");
-
-// addToCart.addEventListener("click", function () {
-//   console.log("bouton cliqué");
-//   alert("notifications");
-
-//Je cree un element
-// const notifications = document.createElement("div");
-// console.log(notifications);
-
-//Je donne une style à la DIV
-// notifications.classList.add("toast");
-
-//J'insere du contenu texte
-// notifications.innerText = "Votre article a bien été enregistrée";
-// console.log(notifications);
-
-//J'accroche notifications à l'element ctn
-// ctn.appendChild(notifications);
-
-//A la fin du chrono, je retire la notification du DOM
-//   setTimeout(function () {
-//     notifications.remove();
-//   }, 2000);
-
-// });
