@@ -190,6 +190,12 @@ function handleFormSubmit() {
       console.log(productIds);
       // Boucler sur les elements
       // Faire un tableau avec les id des produits
+      let newArray = [];
+
+      for (let index = 0; index < products.length; index++) {
+        newArray.push(products[index].id);
+      }
+
       // Remplacer le faux tableau ["107fb5b75607497b96722bda5b504926"] par le résultat du dessus
 
       const commandResult = await sendCommand({
