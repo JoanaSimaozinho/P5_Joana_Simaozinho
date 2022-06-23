@@ -20,11 +20,9 @@ async function getProducts() {
 
         //revoie la promise et ne traite que dans le cas ou la promise initiale est rejetée
         .catch((e) => {
-          console.log(e);
           reject(e);
         });
     } catch (error) {
-      console.log(error);
       reject(error);
     }
   });
@@ -43,7 +41,6 @@ async function displayProducts() {
   });
   //On accède a un element specifique avec get element by id 
   document.getElementById("items").innerHTML = list;
-  console.log(list);
 }
 
 displayProducts();

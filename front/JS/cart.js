@@ -1,3 +1,5 @@
+//On appelle le serveur et on lui demande de retourner le produit qui a pour id l'id passé en paramètre
+
 async function getProduct(id) {
   return new Promise((resolve, reject) => {
     const url = `http://localhost:3000/api/products/${id}`;
@@ -7,11 +9,12 @@ async function getProduct(id) {
         resolve(data);
       })
       .catch((e) => {
-        console.log(e);
         reject(e);
       });
   });
 }
+
+//On recupere la valeur du panier qui est stocké dans le local storage
 
 function getCartArray() {
   //On renvoie la valeur associée à la clé passée en paramètre avec getItem()
@@ -34,6 +37,7 @@ function deleteProduct(params) {
   getProductsDisplay();
 }
 
+//
 async function getProductsDisplay() {
   const cartArray = getCartArray();
   let productsHTML = "";
@@ -135,7 +139,6 @@ async function sendCommand(payload) {
     })
       .then((response) => resolve(response.json()))
       .catch((e) => {
-        console.log(e);
         reject(e);
       });
   });
@@ -149,7 +152,6 @@ function handleFormSubmit() {
       const formData = new FormData(form);
       let contact = {};
       for (var pair of formData.entries()) {
-        // console.log(pair[0] + ": " + pair[1]);
         const key = pair[0];
         const result = pair[1];
         // TO DO : finir les test
