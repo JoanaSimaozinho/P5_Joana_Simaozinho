@@ -154,7 +154,7 @@ function handleFormSubmit() {
       for (var pair of formData.entries()) {
         const key = pair[0];
         const result = pair[1];
-        // TO DO : finir les test
+
         if (key === "firstName") {
           const firstNameError = document.querySelector("#firstNameErrorMsg");
           if (firstNameError) {
