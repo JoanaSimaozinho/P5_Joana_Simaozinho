@@ -17,6 +17,10 @@ async function getProduct() {
     });
 }
 
+//Attendre résolution de la promesse
+//Executer focntion donnée sur chaque élément du tableau 
+//Acceder a un element specifique qui nous envoie sur page product
+
 async function displayProducts() {
     const product = await getProduct();
     // Construire le html

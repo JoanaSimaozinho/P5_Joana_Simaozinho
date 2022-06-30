@@ -37,7 +37,7 @@ function deleteProduct(params) {
   getProductsDisplay();
 }
 
-//
+//Récuperer tous les elements de chaque produit qui est dans le panier
 async function getProductsDisplay() {
   const cartArray = getCartArray();
   let productsHTML = "";
@@ -130,6 +130,8 @@ function isEmail(email) {
     );
 }
 
+//Envoyer la commande au serveur qui est sensé retourner un n° de commande
+
 async function sendCommand(payload) {
   return new Promise((resolve, reject) => {
     fetch("http://localhost:3000/api/products/order", {
@@ -147,6 +149,8 @@ async function sendCommand(payload) {
       });
   });
 }
+
+//Mettre des messages d'erreur en dessous des champs vides ou ayant des erreurs par exemble un chiffre dans le prénom
 
 function handleFormSubmit() {
   var form = document.querySelector("form");
