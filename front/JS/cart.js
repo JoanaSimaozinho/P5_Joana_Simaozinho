@@ -73,7 +73,8 @@ async function getProductsDisplay() {
             </div>
           </div>
         </article>`;
-    totalPrice += prod.price * line.quantity;
+  
+    totalPrice += prod.price * line.quantity; //raccourci = total price = total price + prod.price * line.quantity
     totalQuantity += parseInt(line.quantity);
   }
 
@@ -114,13 +115,16 @@ async function getProductsDisplay() {
   });
 }
 
+//On test s'il y a des chiffres 
 function hasNumber(string) {
-  return /\d/.test(string);
+  return /\d/.test(string); // /\d/ = reject
 }
 
 function isEmail(email) {
   return email
+  //Méthode JS pour tout mettre en lettres minuscules
     .toLowerCase()
+    //Vérifie si la valeur de l'e-mail rentré est valide ou non
     .match(
       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
     );
@@ -159,10 +163,10 @@ function handleFormSubmit() {
           const firstNameError = document.querySelector("#firstNameErrorMsg");
           if (firstNameError) {
             if (!result) {
-              return (firstNameError.textContent = " Pas vide non");
+              return (firstNameError.textContent = "Veuillez compléter le champ vide");
             }
             if (hasNumber(result)) {
-              return (firstNameError.textContent = "Pas de chiffre, non. ");
+              return (firstNameError.textContent = "Pas de chiffre");
             }
             firstNameError.textContent = "";
           }
@@ -171,11 +175,11 @@ function handleFormSubmit() {
           const emailError = document.querySelector("#emailErrorMsg");
           if (emailError) {
             if (!result) {
-              return (emailError.textContent = " Pas vide non");
+              return (emailError.textContent = "Veuillez compléter le champ vide");
             }
             if (!isEmail(result)) {
               return (emailError.textContent =
-                "Ca n est pas un email. Attention attention, non.");
+                "Mettez un e-mail valide");
             }
             emailError.textContent = "";
           }
@@ -202,6 +206,10 @@ function handleFormSubmit() {
         products: productsIds,
       });
       // TESTER LE STATUS DE LA REPONSE AVANT LA REDIRECTION
+      if(commandResult.status !== 200) {
+        alert("Impossible de valider la commande")
+        return false
+      }
       window.location.href = `confirmation.html?id=${commandResult.orderId}`;
     });
   }

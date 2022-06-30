@@ -70,7 +70,7 @@ if (btnElt !== null) {
         // Verifier couleur selectionnée
         const colorsElt = document.querySelector("#colors");
         if (!colorsElt.value) {
-            alert("Choisissez au moins une couleur");
+            alert("Choisissez une couleur");
             return false;
         }
         const colorValue = colorsElt.value;
@@ -124,9 +124,11 @@ if (btnElt !== null) {
         }
         //J'ajoute le produit au panier clé : cart valeur: panier chaque objet sera un canapé
         localStorage.setItem("cart", JSON.stringify(cartArray));
+        //alert est un tamplating
         alert(
+            //si la quantité est supérieure a 1 ? tu mets un "s" sinon : un tu ne mets rien ""
             `Vous avez ajouté ${quantityValue} canapé${
-        quantityValue > 1 ? "s" : ""
+        quantityValue > 1 ? "s" : "" // le "?" est une écriture ternaire qui permet de faire un test rapidement
       } dans votre panier`
         );
     });

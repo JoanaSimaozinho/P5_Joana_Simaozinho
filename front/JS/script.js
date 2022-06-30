@@ -3,7 +3,7 @@
 //On boucle sur cette liste pour générer du HTML
 //Quand c'est fait on ré injecte le HTML dans le document
 
-async function getProducts() {
+async function getProduct() {
 
   //on renvoi une promise pour faire un chainage
   return new Promise((resolve, reject) => {
@@ -33,7 +33,7 @@ async function getProducts() {
 
 async function displayProducts() {
   //On force la fonction a attendre la resolution de la promesse avec await
-  const canaps = await getProducts();
+  const canaps = await getProduct();
   let list = "";
   //exécute la fonction donnée sur chaque element du tableau
   canaps.forEach((canap) => {
