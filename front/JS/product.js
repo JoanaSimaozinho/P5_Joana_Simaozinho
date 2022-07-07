@@ -25,7 +25,7 @@ async function displayProducts() {
     const product = await getProduct();
     // Construire le html
     // Injecter dans la page
-    let option = "";
+    let option = '<option value="">--SVP, choisissez une couleur--</option>';
     product.colors.forEach(
         (color) => (option += `<option value="${color}">${color}</option>`)
     );

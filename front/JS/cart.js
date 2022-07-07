@@ -152,9 +152,15 @@ async function sendCommand(payload) {
 }
 
 function handleFormSubmit() {
-  var form = document.querySelector("form");
-  if (form) {
-      form.addEventListener("submit", async function(event) {
+    const products = getCartArray();
+    debugger
+    if (products.length === 0) {
+        alert("Merci d'ajouter des produits avant de passer commande")
+        return false
+    } 
+    const form = document.querySelector("form");
+    if (form) {
+        form.addEventListener("submit", async function(event) {
           event.preventDefault();
           const formData = new FormData(form);
           let contact = {};
@@ -192,7 +198,7 @@ function handleFormSubmit() {
           // sendCommand({ contact: contact, products: ["107fb5b75607497b96722bda5b504926"] });
           // Récupérer le vrai formulaire
           // Récupérer le arrayCart
-          const products = getCartArray();
+         
 
           // Boucler sur les elements
           // Faire un tableau avec les id des produits
@@ -210,6 +216,7 @@ function handleFormSubmit() {
           })
 
           if (commandResult) {
+              localStorage.removeItem("cart")
               window.location.href = `confirmation.html?id=${commandResult.orderId}`;
           }
       });
