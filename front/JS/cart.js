@@ -153,7 +153,6 @@ async function sendCommand(payload) {
 
 function handleFormSubmit() {
     const products = getCartArray();
-    debugger
     if (products.length === 0) {
         alert("Merci d'ajouter des produits avant de passer commande")
         return false
